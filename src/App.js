@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Github, Linkedin, Mail, ExternalLink, Download, ChevronRight } from 'lucide-react';
+import CV from './assets/AlfredGyanCV.docx';
 
 const Portfolio = () => {
   const [hoveredCard, setHoveredCard] = useState(null);
@@ -50,23 +51,41 @@ const Portfolio = () => {
       image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTkyYv3qity13AS3iQ2_TOGkOUO5LAc0ejjsA&s"
     },
   ];
-  const softSkills = [
-    "Communication",
-    "Critical Thinking",
-    "Teamwork",
-    "Mindfulness",
-    "Public Speaking",
-    "Leadership",
-    "Professional Networking"
-  ];
+  
   const skills = [
     "ReactJS", "React Native", "PHP", "NodeJS", "TypeScript",
     "HTML5", "CSS3", "Git", "Firebase", "UI/UX Design",
     "Photoshop", "Figma", "Agile/Scrum", "MySQL", "MongoDB", "Twilio",
     "Clerk Authentication", "Stream API", "Tailwind CSS", "Bootstrap CSS",
     "Python", "Flask", "RESTful APIs", "Embedded Systems", "Arduino",
+   
     "Problem-Solving", "Teamwork", "Leadership", "Communication", "Critical Thinking",
     "Teamwork", "Mindfulness", "Public Speaking", "Leadership", "Professional Networking"
+    
+  ];
+
+  const certificates = [
+    {
+      title: "Google IT Support Professional Certificate",
+      issuer: "Google",
+      date: "2020",
+      link: "https://www.coursera.org/account/accomplishments/professional-cert/SCTCCVHQDR2T",
+      image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTQI9FLa7H7rDM4-MKE23fykxyhE-cjoosZ_A&s"
+    },
+    {
+      title: "Microsoft Certified: Azure Fundamentals",
+      issuer: "Microsoft",
+      date: "2020",
+      link: "https://www.credly.com/earner/earned/badge/c87326b4-bdfb-4c07-95e1-2d1c187a5f2d",
+      image: "https://images.credly.com/size/340x340/images/be8fcaeb-c769-4858-b567-ffaaa73ce8cf/image.png"
+    },
+    {
+      title: "Git",
+      issuer: "IBM",
+      date: "2021",
+      link: "https://www.credly.com/earner/earned/badge/113e46db-913a-448b-94b1-9497a2164127",
+      image: "https://images.credly.com/size/340x340/images/e9f23497-11a7-489b-9a5a-68e031d36bee/DNA_Git.png"
+    },
     
   ];
 
@@ -111,7 +130,7 @@ const Portfolio = () => {
           {/* Download CV Button */}
           <div className="mt-8 flex justify-center">
             <a
-              href="/path-to-your-cv.pdf"
+              href={CV}
               download="Alfred_Prince_Gyan_CV.pdf"
               className="inline-flex items-center gap-2 bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors"
             >
@@ -162,6 +181,44 @@ const Portfolio = () => {
         </div>
       </section>
 
+      {/* Certificates Section */}
+      <section className="py-16 px-4 bg-gray-50">
+        <div className="max-w-6xl mx-auto">
+          <h2 className="text-3xl font-bold text-gray-900 mb-8 relative">
+            Certificates
+            <div className="absolute bottom-0 left-0 w-24 h-1 bg-blue-600 transform origin-left hover:scale-x-150 transition-transform duration-300" />
+          </h2>
+          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+            {certificates.map((cert, index) => (
+              <a
+                key={index}
+                href={cert.link}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2"
+              >
+                <div className="relative h-48 overflow-hidden">
+                  <img
+                    src={cert.image}
+                    alt={cert.title}
+                    className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                </div>
+                <div className="p-6">
+                  <h3 className="text-xl font-semibold text-gray-900 group-hover:text-blue-600 transition-colors">
+                    {cert.title}
+                  </h3>
+                  <p className="text-gray-600 mt-2">
+                    {cert.issuer} • {cert.date}
+                  </p>
+                </div>
+              </a>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* Updated Projects Section with Images */}
       <section className="py-16 px-4">
         <div className="max-w-6xl mx-auto">
@@ -172,8 +229,12 @@ const Portfolio = () => {
           <div className="grid gap-8 md:grid-cols-2">
             {projects.map((project, index) => (
               <div
-                key={index}
-                className="group bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2"
+                key={index}                
+                className={`group bg-white rounded-xl overflow-hidden shadow-sm transition-all duration-300 transform ${
+                  hoveredCard === index 
+                    ? 'shadow-xl -translate-y-2' 
+                    : 'hover:shadow-xl hover:-translate-y-2'
+                }`}
                 onMouseEnter={() => setHoveredCard(index)}
                 onMouseLeave={() => setHoveredCard(null)}
               >
