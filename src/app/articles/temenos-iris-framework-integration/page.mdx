@@ -1,0 +1,98 @@
+import { ArticleLayout } from '@/components/ArticleLayout'
+import irisArchitectureDiagram from './iris-architecture-diagram.png'
+
+export const article = {
+  author: 'Alfred Prince Gyan',
+  date: '2026-09-04',
+  title: 'Technical Wiki & Developer Guide: IRIS API Creation in Temenos T24 (Transact)',
+  description:
+    'A practical blueprint for architects and developers building, governing, and deploying RESTful APIs using the Interaction Reporting and Information Services (IRIS) R18 framework in Temenos Transact.',
+}
+
+export const metadata = {
+  title: article.title,
+  description: article.description,
+}
+
+export default (props) => <ArticleLayout article={article} {...props} />
+
+The Interaction Reporting and Information Services (IRIS) framework serves as the strategic REST-standard gateway between modern user agents and the Temenos Transact (T24) back-office. By abstracting the complexities of the Open Financial Service (OFS) message format, IRIS provides a lightweight, release-agnostic integration layer. For the Temenos Architect, the Release 18 (R18) framework is particularly significant, as it ensures cross-release compatibility, allowing the same API definitions to function across different T24 core versions without modification.
+
+<Image src={irisArchitectureDiagram} alt="Architectural representation of the IRIS provider layer, Apache Camel engine, and T24 back-office connectors" />
+
+To build scalable integrations, developers must understand the modular stack and metadata model powering the framework:
+
+*   **Provider API Layer:** The host for RESTful services exposing T24 business logic.
+*   **Published API:** A transformation layer used to map Provider APIs to external application standards or specific message formats (e.g., PSD2).
+*   **Connectors (TAFC/TAFJ):** The underlying bridges to the T24 database. TAFJ utilizes the JMS Connector for high-availability messaging, while TAFC relies on the TCS Connector over TCP/IP.
+*   **Apache Camel:** The core routing and mediation engine that defines REST endpoints and handles transformations between JSON payloads and the back-office OFS format.
+*   **Metadata Dynamics:** Static metadata (`/$metadata`) provides full entity schemas, while dynamic metadata (`T24FieldMetadata`) describes real-time field constraints, internationalization, and selection lists.
+
+## T24 API Design Governance & Standards
+
+Strict adherence to naming conventions and data typing is non-negotiable. Without these standards, T24 resources cannot be accurately discovered by the IRIS Workbench or rendered correctly by the metadata engine. Governance ensures that legacy core components are transformed into clean, predictable RESTful resources.
+
+All artefacts must follow mandatory naming structures and incorporate Semantic Versioning (Major.Minor.Patch) to manage the API lifecycle effectively:
+*   **Enquiry IDs:** Plural collections formatted as `XX.API.COLLECTIONS.VERSION` (e.g., `AC.API.ACCOUNTS.TRANSACTIONS.1.0.0`).
+*   **Version IDs:** Verb-focused paths formatted as `XX.API.verb.version` (e.g., `AC.API.CREATE.TRANSFER.1.0.0`).
+
+### Swagger Data Type Mapping
+
+To ensure valid JSON serialization, every Enquiry column (`FIELD.DISP.TYPE`) and Version field (`ATTRIBS`) must be explicitly typed. IRIS maps these to Swagger schema types:
+
+| T24 Data Type | Swagger Schema Data Type | Mapping Notes |
+| :--- | :--- | :--- |
+| ALPHANUMERIC | string | Default fallback if unspecified |
+| AMOUNT | number | Must be unformatted raw numbers (e.g., `1234.56`) |
+| DATE | Date | Standard format required: `YYYYMMDD` |
+| TIMESTAMP | Date-time | Conforms to ISO 8601 standard |
+| BOOLEAN | Boolean | Serialized directly as `True` or `False` |
+| NUMERIC | integer | Supported primarily for Enquiries |
+
+### Artefact Cleaning & Back-Office Prerequisites
+
+T24 artefacts must be stripped of UI-specific logic to prevent breaking the UXP parser:
+
+1.  **Enquiry Restrictions:** Remove all `HEADER` fields, static labels, and drill-down information. Transform `FIELD.LABEL` and `SEL.LABEL` into camelCase API-style labels (e.g., `Cleared Bal` becomes `clearedBalance`).
+2.  **Field Mapping:** In Versions, the `DESCRIPTION` field defines the Operation Name (e.g., `createFundsTransfer`). The `PROMPT.TEXT` field is mandatory for identifying multi-value or sub-value collections; without it, the field will not be rendered as a JSON array.
+3.  **Back-Office Configuration:** In the `OFS.SOURCE` record, set `FIELD.VAL` to `Yes` (enabling validation for AA activities) and remove the `TWS` attribute to ensure compatibility with R18 protocols.
+
+## Step-by-Step Provider API Development Lifecycle
+
+Transitioning from T24 design-time to a deployable API requires the IRIS Workbench and a specific Maven build sequence. First, configure your workspace by adding the Archetype Local Catalog (`archetype-catalog.xml`) in Design Studio (Eclipse) under **Preferences > Archetypes**, pointing to `irf-service-container-archetype` and `irf-service-archetype`.
+
+### Workbench-Driven API Creation
+
+1.  **Launch Workbench:** Access `irf-web-client.war` via your local server instance (typically `http://localhost:9089/irf-web-client`).
+2.  **Definition:** Input the Title, Service Key, and semantic Version details.
+3.  **Artefact Selection:** Select your cleaned T24 resource (Enquiry or Version).
+4.  **Mapping:** Map URL parameters to Enquiry selection fields. For Versions, map the Record Key to a URL parameter to enable specific record lookup.
+5.  **Generate:** Execute the generation wizard to download the compiled `.zip` containing Swagger specs, Camel routes, and field mappings.
+
+### Maven Orchestration & Dependencies
+
+The build order is critical: you must build the Service Project first before compiling the Container Project.
+
+```xml
+<!-- Add the generated Service Project JAR as a dependency in the Container pom.xml -->
+<dependency>
+  <groupId>com.temenos.iris</groupId>
+  <artifactId>ac-accounts-service</artifactId>
+  <version>1.0.0</version>
+</dependency>
+```
+
+Execute mvn clean install on the Service Project to output the primary .jar. Copy the unzipped Workbench assets (api-docs, inventory, services) into src/main/resources. Finally, link the dependency inside the Container Project's pom.xml, build the container, and deploy the resulting .war file to your JBoss deployment path.
+
+Connectivity & Infrastructure Services
+--------------------------------------
+
+High availability and secure communication are maintained through connector configurations and infrastructure hardening in the standalone-comms.properties configuration.
+
+When using TAFJ (JMS Connector), you must map three critical JNDI resources within the deployment descriptor:
+
+*   queue/t24OFSQueue: Dedicated for outgoing OFS requests.
+    
+*   queue/t24OFSReplyQueue: Listener for incoming response processing.
+    
+*   jms/jmsConnectionFactory: Factory used to manage high-throughput messaging connections.

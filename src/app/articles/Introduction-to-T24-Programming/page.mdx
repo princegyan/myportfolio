@@ -1,0 +1,118 @@
+import { ArticleLayout } from '@/components/ArticleLayout'
+
+export const article = {
+  author: 'Alfred Prince Gyan',
+  date: '2026-05-14',
+  title: 'Introduction to T24 Programming - Understanding the Modern Componentized Form',
+  description:
+    'An introductory technical guide to modern Temenos T24 (Transact) programming on the TAFJ framework. It covers the transition from legacy TAFC to Java-based TAFJ, key concepts like modularization and $USING namespace imports, and a step-by-step process for writing, compiling, and registering custom subroutines.',
+}
+
+export const metadata = {
+  title: article.title,
+  description: article.description,
+}
+
+export default (props) => <ArticleLayout article={article} {...props} />
+
+### Core Architectural Shift: Legacy TAFC vs. Modern TAFJ
+
+Temenos T24 (Transact) historically ran on **TAFC** (Temenos Application Framework C) using jBC (InfoBasic). In modern componentized setups, the architecture has shifted to **TAFJ** (Temenos Application Framework Java).
+
+Under TAFJ, source code written in jBC is parsed and compiled directly into standard Java bytecode (`.class` files) that executes on a Java Virtual Machine (JVM) inside enterprise application servers like WildFly or JBoss.
+
+```
+┌───────────────────────────────────────────────┐
+│              jBC Source Code (.b)             │
+└───────────────────────┬───────────────────────┘
+                        │ TAFJ Compiler
+                        ▼
+┌───────────────────────────────────────────────┐
+│              Java Bytecode (.class)           │
+└───────────────────────┬───────────────────────┘
+                        │ Package into JAR
+                        ▼
+┌───────────────────────────────────────────────┐
+│        JVM Runtime (JBoss / WildFly)         │
+└───────────────────────────────────────────────┘
+
+```
+
+---
+
+### Key Concepts in Componentized T24
+
+**1. Componentization & Modular Structure**
+Instead of monolithically referencing shared routines across flat directories, modern T24 isolates logic into distinct **Modules** and **Components**. Code is organized by domain boundary (e.g., `ST` for Static Tables, `AC` for Accounts).
+
+**2. Modern Package Imports (`$USING`)**
+Legacy code relied on file includes to load common definitions (`$INSERT I_COMMON`, `$INSERT I_EQUATE`, `$INSERT I_F.CUSTOMER`). Modern TAFJ uses scoped package imports via the `$USING` keyword.
+
+| Feature | Legacy TAFC | Modern Componentized TAFJ |
+| --- | --- | --- |
+| **Includes / Imports** | `$INSERT I_F.CUSTOMER` | `$USING ST.Customer` |
+| **Field Reading** | `R.CUSTOMER<CUST.SHORT.NAME>` | `ST.Customer.Customer.getShortName()` or standard field getters |
+| **Common Variables** | Common block includes (`I_COMMON`)
+
+ | Encapuslated methods / System API classes |
+| **Runtime Target** | C / C-extensions | Java / JVM `.class` files |
+
+---
+
+### Step-by-Step Guide: Writing a Modern TAFJ Component Routine
+
+This guide walks through creating a simple componentized validation routine using **Temenos Design Studio** (Eclipse-based IDE).
+
+1. **Set Up Your Module and Component in Design Studio:** Ensure your project targets a valid TAFJ environment.
+1. Open **Temenos Design Studio**.
+2. Create or navigate to your custom **Module** (e.g., `EB_CustomModule`).
+3. Create a **Component** definition file (`.component`) where your routines will be published.
+
+2. **Write the Routine using Scoped Imports:** Use USING instead of legacyINSERT statements.
+Create a new routine file (e.g., `V.CUST.CHECK.PHONE.b`). Write the logic using modern jBC syntax and namespace rules:
+
+```basic
+SUBROUTINE V.CUST.CHECK.PHONE
+* Modern TAFJ imports
+$USING ST.Customer
+$USING EB.SystemTables
+$USING EB.ErrorProcessing
+
+* Read field value using the componentized getter paradigm
+phoneNo = EB.SystemTables.getCommi()
+
+* Validation check
+IF phoneNo EQ '' THEN
+    EB.SystemTables.setAf(ST.Customer.Customer.OffPhone)
+    EB.SystemTables.setEtext("Phone Number is required.")
+    EB.ErrorProcessing.StoreEndError()
+END
+
+RETURN
+END
+
+```
+
+3. **Compile and Package to Java Bytecode:** Transforms jBC code into executable JARs.
+1. Save your routine in Design Studio.
+2. Trigger the build action. The TAFJ compiler converts the `.b` file into `.class` files and packages them into a target JAR file.
+3. The resulting `.jar` file is automatically deployed to the local or remote TAFJ server runtime environment.
+
+4. **Register in T24 Application Records:** Attach the routine to a version or event hook.
+1. Open T24 via Browser or command-line.
+2. Define an `EB.API` record for `V.CUST.CHECK.PHONE` to register the class method in the system catalog.
+3. Attach `V.CUST.CHECK.PHONE` as a Validation Routine on your target `VERSION` record (e.g., `CUSTOMER,INPUT`).
+
+---
+
+### Best Practices for New T24 Developers
+
+* **Avoid Legacy Includes:** Never use `$INSERT I_COMMON` or `$INSERT I_EQUATE` in new development unless maintaining legacy applications. Always prefer `$USING` namespaces.
+
+* **Maintain Thread Safety:** Multi-threading is supported across T24 services. Ensure custom routines used in batch or multi-threaded jobs avoid global variable mutation across thread boundaries.
+
+* **Leverage TAFJ Tools:** Use `tShow` from the TAFJ command-line tool to inspect package names, classes, and exposed methods when mapping legacy tables to modern components.
+
+---
+
+If you'd like to get a practical overview of transitioning legacy jBC code into TAFJ components, check out this video: [Temenos T24 TAFC to TAFJ Transition](https://www.youtube.com/watch?v=0nLXQSFxHP8). This video is relevant because it provides a visual walkthrough of migrating legacy InfoBasic code to modern TAFJ component architecture using Design Studio.
