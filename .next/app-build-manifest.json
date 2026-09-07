@@ -20,7 +20,7 @@
       "static/chunks/fd9d1056-c90512bc6795290e.js",
       "static/chunks/23-510c4784adac66dc.js",
       "static/chunks/main-app-86160a32b367982f.js",
-      "static/css/e36d700052f418ed.css",
+      "static/css/6fa52e3a43685aaa.css",
       "static/chunks/c16f53c3-4935902af006763a.js",
       "static/chunks/231-5df8fb61e376c60b.js",
       "static/chunks/173-6d8da7d72b03a50a.js",
@@ -34,23 +34,16 @@
       "static/chunks/main-app-86160a32b367982f.js",
       "static/chunks/231-5df8fb61e376c60b.js",
       "static/chunks/173-6d8da7d72b03a50a.js",
-      "static/chunks/app/page-751f58427293e36d.js"
+      "static/chunks/app/page-2124e090ef597541.js"
     ],
-    "/articles/Introduction-to-T24-Programming/page": [
+    "/articles/page": [
       "static/chunks/webpack-d7c9276618abe3e4.js",
       "static/chunks/fd9d1056-c90512bc6795290e.js",
       "static/chunks/23-510c4784adac66dc.js",
       "static/chunks/main-app-86160a32b367982f.js",
+      "static/chunks/231-5df8fb61e376c60b.js",
       "static/chunks/173-6d8da7d72b03a50a.js",
-      "static/chunks/app/articles/Introduction-to-T24-Programming/page-60ba3bc24df00d07.js"
-    ],
-    "/articles/temenos-iris-framework-integration/page": [
-      "static/chunks/webpack-d7c9276618abe3e4.js",
-      "static/chunks/fd9d1056-c90512bc6795290e.js",
-      "static/chunks/23-510c4784adac66dc.js",
-      "static/chunks/main-app-86160a32b367982f.js",
-      "static/chunks/173-6d8da7d72b03a50a.js",
-      "static/chunks/app/articles/temenos-iris-framework-integration/page-cda29667ec99512f.js"
+      "static/chunks/app/articles/page-9c93cd9fb9efcad7.js"
     ],
     "/about/page": [
       "static/chunks/webpack-d7c9276618abe3e4.js",
@@ -61,14 +54,30 @@
       "static/chunks/173-6d8da7d72b03a50a.js",
       "static/chunks/app/about/page-4c7c1dc179e42fda.js"
     ],
-    "/articles/page": [
+    "/articles/temenos-iris-framework-integration/page": [
+      "static/chunks/webpack-d7c9276618abe3e4.js",
+      "static/chunks/fd9d1056-c90512bc6795290e.js",
+      "static/chunks/23-510c4784adac66dc.js",
+      "static/chunks/main-app-86160a32b367982f.js",
+      "static/chunks/173-6d8da7d72b03a50a.js",
+      "static/chunks/app/articles/temenos-iris-framework-integration/page-cda29667ec99512f.js"
+    ],
+    "/articles/Introduction-to-T24-Programming/page": [
+      "static/chunks/webpack-d7c9276618abe3e4.js",
+      "static/chunks/fd9d1056-c90512bc6795290e.js",
+      "static/chunks/23-510c4784adac66dc.js",
+      "static/chunks/main-app-86160a32b367982f.js",
+      "static/chunks/173-6d8da7d72b03a50a.js",
+      "static/chunks/app/articles/Introduction-to-T24-Programming/page-60ba3bc24df00d07.js"
+    ],
+    "/projects/page": [
       "static/chunks/webpack-d7c9276618abe3e4.js",
       "static/chunks/fd9d1056-c90512bc6795290e.js",
       "static/chunks/23-510c4784adac66dc.js",
       "static/chunks/main-app-86160a32b367982f.js",
       "static/chunks/231-5df8fb61e376c60b.js",
       "static/chunks/173-6d8da7d72b03a50a.js",
-      "static/chunks/app/articles/page-9c93cd9fb9efcad7.js"
+      "static/chunks/app/projects/page-18a6b4940684d0cd.js"
     ],
     "/thank-you/page": [
       "static/chunks/webpack-d7c9276618abe3e4.js",
@@ -92,15 +101,6 @@
       "static/chunks/main-app-86160a32b367982f.js",
       "static/chunks/231-5df8fb61e376c60b.js",
       "static/chunks/app/speaking/page-787124354fbd9a4d.js"
-    ],
-    "/projects/page": [
-      "static/chunks/webpack-d7c9276618abe3e4.js",
-      "static/chunks/fd9d1056-c90512bc6795290e.js",
-      "static/chunks/23-510c4784adac66dc.js",
-      "static/chunks/main-app-86160a32b367982f.js",
-      "static/chunks/231-5df8fb61e376c60b.js",
-      "static/chunks/173-6d8da7d72b03a50a.js",
-      "static/chunks/app/projects/page-18a6b4940684d0cd.js"
     ]
   }
 }
