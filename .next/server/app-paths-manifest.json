@@ -1,14 +1,4 @@
 {
-  "/_not-found/page": "app/_not-found/page.js",
-  "/favicon.ico/route": "app/favicon.ico/route.js",
   "/page": "app/page.js",
-  "/feed.xml/route": "app/feed.xml/route.js",
-  "/articles/page": "app/articles/page.js",
-  "/about/page": "app/about/page.js",
-  "/articles/temenos-iris-framework-integration/page": "app/articles/temenos-iris-framework-integration/page.js",
-  "/articles/Introduction-to-T24-Programming/page": "app/articles/Introduction-to-T24-Programming/page.js",
-  "/projects/page": "app/projects/page.js",
-  "/thank-you/page": "app/thank-you/page.js",
-  "/uses/page": "app/uses/page.js",
-  "/speaking/page": "app/speaking/page.js"
+  "/favicon.ico/route": "app/favicon.ico/route.js"
 }

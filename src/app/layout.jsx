@@ -7,10 +7,10 @@ export const metadata = {
   title: {
     template: '%s - Alfred Prince Gyan',
     default:
-      'Alfred Prince Gyan - Software designer, founder, and amateur astronaut',
+      'Alfred Prince Gyan - Software Engineer',
   },
   description:
-    'I’m Spencer, a software designer and entrepreneur based in New York City. I’m the founder and CEO of Planetaria, where we develop technologies that empower regular people to explore space on their own terms.',
+    'I’m a software engineer based in Ghana, building reliable web and backend systems. I specialize in React, TypeScript, APIs, and financial technology, with a focus on solving complex problems through simple, maintainable solutions.',
   alternates: {
     types: {
       'application/rss+xml': `${process.env.NEXT_PUBLIC_SITE_URL}/feed.xml`,
